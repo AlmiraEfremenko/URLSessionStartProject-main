@@ -27,8 +27,6 @@ public final class RESTClient {
 
     public static func call(request: URLRequest, session: URLSession?, completion handler: @escaping ResultCompletionHandler) {
         
-        
-        
         let completionHandler: SessionCompletionHandler = { data, response, error in
             guard let httpResponse = response as? HTTPURLResponse else {
                 handler(ResponseResult.failure(ServerError.networkProblem))
@@ -52,10 +50,7 @@ public final class RESTClient {
                 }
             }
         }
-        
-        
-        
-        
+
         self.resumeDataTask(with: request, session: session, completionHandler: completionHandler)
     }
     
@@ -70,4 +65,3 @@ public final class RESTClient {
 //        (session ?? URLSession.shared).downloadTask(with: request, completionHandler: completionHandler).resume()
     }
 }
-

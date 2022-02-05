@@ -19,7 +19,6 @@ public enum ServerError: Error {
     // first value code status
     // second value error message
     case invalidRequest((Int, String))
-    
 }
 
 // MARK: - LocalizedError
@@ -34,7 +33,6 @@ extension ServerError: LocalizedError {
         case .invalidRequest(_, let message): return message
         }
     }
-    
 }
 
 /// MARK: - Equatable
@@ -56,6 +54,4 @@ extension ServerError: Equatable {
             return false
         }
     }
-    
 }
-
