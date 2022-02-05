@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CryptoKit
 
 class ViewController: UIViewController {
 
@@ -34,33 +35,39 @@ class ViewController: UIViewController {
         
         endpointClient.executeRequest(endpoint, completion: completion)
     }
-
-
 }
 
 final class GetNameEndpoint: ObjectResponseEndpoint<String> {
     
     override var method: RESTClient.RequestType { return .get }
-    override var path: String { "/v1/cards" }
+    override var path: String { "/v1/public/characters" }
+
 //    override var queryItems: [URLQueryItem(name: "id", value: "1")]?
     
     override init() {
         super.init()
-
-        queryItems = [URLQueryItem(name: "name", value: "Black Lotus")]
+        
+        //два параметра в дополнение к параметру apikey: ts - метка времени (или другая длинная строка, которая может изменяться по запросу) и хэш - md5 дайджест параметра ts, вашего закрытого ключа и вашего открытого ключа (например, md5(ts+privateKey+publicKey)
+           
+        let ts = "\(NSDate.timeIntervalSinceReferenceDate)"
+        let privateKey = "2f3d52d12632c67e4216515e55de3266b6deb788"
+        let publicKey = "e69ccc99cbd4f72ea3f5f6daff29d4cf"
+        let hash = MD5(string: ts + privateKey + publicKey)
+        
+        queryItems = [URLQueryItem(name: "name", value: "Groot"),
+                      URLQueryItem(name: "ts", value: ts),
+                      URLQueryItem(name: "apikey", value: publicKey),
+                      URLQueryItem(name: "hash", value: hash)]
     }
     
+    func MD5(string: String) -> String {
+        let digest = Insecure.MD5.hash(data: string.data(using: .utf8) ?? Data())
+        
+        return digest.map {
+            String(format: "%02hhx", $0)
+        }.joined()
+    }
 }
-
-
-
-
-
-
-
-
-
-
 
 func decodeJSONOld() {
     let str = """
@@ -79,4 +86,3 @@ func decodeJSONOld() {
         print("Failed to load: \(error.localizedDescription)")
     }
 }
-
