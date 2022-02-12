@@ -47,6 +47,4 @@ extension EndpointClientError: Equatable {
             return false
         }
     }
-
 }
-
